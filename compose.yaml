@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:latest
+    hostname: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ./app/postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB_NAME}
+
+  xera_app:
+    build: .
+    ports:
+      - 8080:8080
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB_NAME}
+    depends_on:
+      - postgres
