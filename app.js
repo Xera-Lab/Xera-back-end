@@ -1,6 +1,8 @@
 require('dotenv').config({ path: `${process.cwd()}/.env` });
-const adminRoutes = require('./admin/src/admin');
-const customerRoutes = require('./customer/customer');
+const adminRoutes = require('./modules/admin/admin');
+const casesRoutes = require('./modules/cases/cases');
+const authRoutes = require('./modules/auth/auth');
+const servicesRouter = require('./modules/services/services');
 const globalErrorHandler = require('./utils/errors/errorController');
 
 
@@ -12,8 +14,8 @@ const app = express();
 app.use(express.json());
 
 
-app.use('/api/v1/', customerRoutes);
-app.use('/api/v1/admin', adminRoutes);
+app.use('/api/v1/', casesRoutes, adminRoutes, authRoutes, servicesRouter);
+
 
 
 app.use(globalErrorHandler);

@@ -56,12 +56,12 @@ const sendErrorProd = (error, res) => {
 const globalErrorHandler = (err, req, res, next) => {
     if (err.name === 'JsonWebTokenError') {
         err = new AppError('Invalid token', 401);
-    }
-    if (err.name === 'SequelizeValidationError') {
+    } else if (err.name === 'SequelizeValidationError') {
         err = new AppError(err.errors[0].message, 400);
-    }
-    if (err.name === 'SequelizeUniqueConstraintError') {
+    } else if (err.name === 'SequelizeUniqueConstraintError') {
         err = new AppError(err.errors[0].message, 400);
+    } else if (err.name === 'TokenExpiredError') {
+        err = new AppError('Token Expired', 401);
     }
 
     sendErrorProd(err, res);
