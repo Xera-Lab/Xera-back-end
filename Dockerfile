@@ -1,5 +1,5 @@
 # Fetching the minified node image on apline linux
-FROM node:slim
+FROM --platform=linux/amd64 node:slim
 
 # Declaring env
 ENV NODE_ENV development
@@ -13,8 +13,12 @@ COPY . .
 # Installing dependencies
 RUN npm install
 
-# Starting our application
-CMD [ "node", "app.js" ]
+# Installing Sequelize CLI
+RUN npm install -g sequelize-cli
 
 # Exposing server port
 EXPOSE 8080
+
+# Starting our application
+CMD [ "node", "app.js" ]
+

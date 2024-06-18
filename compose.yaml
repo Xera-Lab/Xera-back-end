@@ -7,17 +7,26 @@ services:
     volumes:
       - ./app/postgres-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
 
   xera_app:
-    build: .
+    image: abdullah3010/xera_lab:dev
     ports:
       - 8080:8080
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: postgres
     depends_on:
       - postgres
+    env_file:
+      - .env
+    command: >
+      sh -c "
+      npx sequelize-cli db:migrate &&
+      npx sequelize-cli db:seed:all &&
+      npm run start
+      "

@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const authUser = require(`${process.cwd()}/db/models/auth/authUser`);
 const doctor = require(`${process.cwd()}/db/models/doctor/doctor`);

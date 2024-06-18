@@ -2,6 +2,7 @@ const getAllCases = require(`${process.cwd()}/modules/cases/api/v1/controllers/g
 const submitNewCase = require(`${process.cwd()}/modules/cases/api/v1/controllers/submitNewCase`);
 const getCaseById = require(`${process.cwd()}/modules/cases/api/v1/controllers/getCaseById`);
 const deleteCase = require(`${process.cwd()}/modules/cases/api/v1/controllers/deleteCase`);
+const assignCase = require(`${process.cwd()}/modules/cases/api/v1/controllers/assignCase`);
 const uploadCaseFiles = require(`${process.cwd()}/modules/cases/api/v1/controllers/uploadCaseFiles`);
 const caseDownloadUrl = require(`${process.cwd()}/modules/cases/api/v1/controllers/caseDownloadUrl`);
 
@@ -21,6 +22,7 @@ casesRouter.route('/:caseId').get(verifyToken, getCaseById);
 casesRouter.route('/:caseId').delete(verifyToken, deleteCase);
 casesRouter.route('/:caseId/upload').post(verifyToken, upload.single('file'), uploadCaseFiles);
 casesRouter.route('/:caseId/download').post(verifyToken, caseDownloadUrl);
+casesRouter.route('/:caseId/assign').post(verifyToken, assignCase);
 
 
 module.exports = casesRouter;
