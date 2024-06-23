@@ -19,6 +19,7 @@ const roleLoginHandlers = {
 
 const login = catchAsync(async (req, res, next) => {
 
+
     if (Object.keys(req.body).length === 0) {
         return next(new AppError('Request body is empty', 400));
     }
@@ -42,6 +43,15 @@ const login = catchAsync(async (req, res, next) => {
 
     if (!authUserData) {
         return next(new AppError('User not found', 404));
+    }
+
+    if (req.headers['x-admin-key'] && req.headers['x-admin-key'] === process.env.ADMIN_KEY) {
+        console.log(req.headers['x-admin-key']);
+        console.log(authUserData.role.name.toLowerCase());
+
+        if (authUserData.role.name.toLowerCase() === 'doctor') {
+            return next(new AppError('Invalid role', 400));
+        }
     }
 
 

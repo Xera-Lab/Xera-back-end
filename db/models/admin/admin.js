@@ -10,7 +10,7 @@ const AppError = require(`${process.cwd()}/utils/errors/appError`);
 const admin = sequelize.define(
   'admin',
   {
-    adminId: {
+    userId: {
       unique: true,
       primaryKey: true,
       type: DataTypes.STRING,
@@ -33,6 +33,7 @@ const admin = sequelize.define(
     freezeTableName: true,
     modelName: 'admin',
     schema: 'admin',
+
   }
 );
 
@@ -42,6 +43,7 @@ const admin = sequelize.define(
 admin.belongsTo(authUser, {
   foreignKey: 'authId',
   targetKey: 'id',
+  as: 'authUser',
   constraints: false
 });
 
@@ -50,7 +52,7 @@ const createAdmin = async (data, transaction) => {
   try {
     const newUserDate = await admin.create({
       authId: data.authId,
-      adminId: `ADMIN_${data.authId}`,
+      userId: `${data.roleName.toUpperCase()}_${data.authId}`,
     }, { transaction });
 
     if (!newUserDate) {
@@ -60,7 +62,7 @@ const createAdmin = async (data, transaction) => {
     const accessToken = generatToken({
       id: data.authId,
       roleName: data.roleName,
-      [`${data.roleName}Id`]: newUserDate.adminId,
+      userId: newUserDate.userId,
     });
 
     return { newUserDate, accessToken };
@@ -84,7 +86,7 @@ const getAdmin = async (authUserData) => {
     const accessToken = generatToken({
       id: authUserData.id,
       roleName: authUserData.role.name,
-      [`${authUserData.role.name}Id`]: userData.adminId,
+      userId: userData.userId,
     });
 
     return { userData, accessToken };

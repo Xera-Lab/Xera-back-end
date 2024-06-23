@@ -123,7 +123,7 @@ const createDoctor = async (data, transaction) => {
     const accessToken = generatToken({
       id: data.authId,
       roleName: data.roleName,
-      [`${data.roleName}Id`]: newUserDate.doctorId,
+      userId: newUserDate.doctorId,
     });
 
     return { newUserDate, accessToken };
@@ -147,7 +147,7 @@ const getDoctor = async (authUserData) => {
     const accessToken = generatToken({
       id: authUserData.id,
       roleName: authUserData.role.name,
-      [`${authUserData.role.name}Id`]: userData.doctorId,
+      userId: userData.doctorId,
     });
 
     return { userData, accessToken };

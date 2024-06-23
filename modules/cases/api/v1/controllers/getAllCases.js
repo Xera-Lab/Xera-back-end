@@ -42,10 +42,12 @@ const getAllCases = catchAsync(async (req, res, next) => {
             delete element.updatedAt;
             delete element.deletedAt;
         }
-        if (jsonDate.services) {
-            delete jsonDate.services.createdAt;
-            delete jsonDate.services.updatedAt;
-            delete jsonDate.services.deletedAt;
+
+        if (element.servicesType) {
+            delete element.servicesType.createdAt;
+            delete element.servicesType.updatedAt;
+            delete element.servicesType.deletedAt;
+
         }
         if (element.status) {
             delete element.status.createdAt;
@@ -57,6 +59,7 @@ const getAllCases = catchAsync(async (req, res, next) => {
             delete element.doctor.createdAt;
             delete element.doctor.updatedAt;
             delete element.doctor.deletedAt;
+            delete element.doctor.authId;
         }
     });
 

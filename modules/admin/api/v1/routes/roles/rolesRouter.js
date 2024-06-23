@@ -12,10 +12,14 @@ const verifyToken = require(`${process.cwd()}/utils/middleware/authentication/ve
 const verifyPermision = require(`${process.cwd()}/utils/middleware/authorization/verifyPermision`);
 
 
-rolesRouter.route('/roles').post(verifyToken, verifyPermision('create_role'), createRole);
-rolesRouter.route('/roles/:id').patch(verifyToken, verifyPermision('update_role'), updateRole);
-rolesRouter.route('/roles/:id').delete(verifyToken, verifyPermision('delete_role'), deleteRole);
-rolesRouter.route('/roles').get(verifyToken, verifyPermision('get_all_roles'), getAllRoles);
+// rolesRouter.route('/roles').post(verifyToken, verifyPermision('create_role'), createRole);
+// rolesRouter.route('/roles/:id').patch(verifyToken, verifyPermision('update_role'), updateRole);
+// rolesRouter.route('/roles/:id').delete(verifyToken, verifyPermision('delete_role'), deleteRole);
+// rolesRouter.route('/roles').get(verifyToken, verifyPermision('get_all_roles'), getAllRoles);
+rolesRouter.route('/roles').post(verifyToken, createRole);
+rolesRouter.route('/roles/:id').patch(verifyToken, updateRole);
+rolesRouter.route('/roles/:id').delete(verifyToken, deleteRole);
+rolesRouter.route('/roles').get(verifyToken, getAllRoles);
 
 
 module.exports = rolesRouter;

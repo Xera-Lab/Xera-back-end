@@ -12,7 +12,7 @@ module.exports = {
       [
         {
           authId: 1,
-          superAdminId: "SUPER_1",
+          userId: "SUPER_1",
         },
 
       ],

@@ -22,7 +22,7 @@ const assignCase = catchAsync(async (req, res, next) => {
         return next(new AppError('Cases not found', 404));
     }
 
-    if (!caseData.assigneeId) {
+    if (!req.body.assigneeId) {
         return next(new AppError('Assignee id is required', 400));
     }
 

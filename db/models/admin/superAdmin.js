@@ -10,7 +10,7 @@ const AppError = require(`${process.cwd()}/utils/errors/appError`);
 const superAdmin = sequelize.define(
   'super_admin',
   {
-    superAdminId: {
+    userId: {
       unique: true,
       primaryKey: true,
       type: DataTypes.STRING,
@@ -42,14 +42,16 @@ const superAdmin = sequelize.define(
 superAdmin.belongsTo(authUser, {
   foreignKey: 'authId',
   targetKey: 'id',
-  constraints: false
+  as: 'authUser',
+  constraints: false,
+
 });
 
 const createSuperAdmin = async (data, transaction) => {
   try {
     const newUserDate = await superAdmin.create({
       authId: data.authId,
-      superAdminId: `SUPER_${data.authId}`,
+      userId: `SUPER_${data.authId}`,
     }, { transaction });
 
     if (!newUserDate) {
@@ -59,7 +61,7 @@ const createSuperAdmin = async (data, transaction) => {
     const accessToken = generatToken({
       id: data.authId,
       roleName: data.roleName,
-      [`${data.roleName}Id`]: newUserDate.superAdminId,
+      userId: newUserDate.userId,
     });
 
     return { newUserDate, accessToken };
@@ -83,7 +85,7 @@ const getSuperAdmin = async (authUserData) => {
     const accessToken = generatToken({
       id: authUserData.id,
       roleName: authUserData.role.name,
-      [`${authUserData.role.name}Id`]: userData.superAdminId,
+      userId: userData.userId,
     });
 
     return { userData, accessToken };

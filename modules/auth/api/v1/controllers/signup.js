@@ -4,17 +4,11 @@ const AppError = require(`${process.cwd()}/utils/errors/appError`);
 
 const roles = require(`${process.cwd()}/db/models/auth/role`);
 const authUser = require(`${process.cwd()}/db/models/auth/authUser`);
-const { createAdmin } = require(`${process.cwd()}/db/models/admin/admin`);
-const { createSuperAdmin } = require(`${process.cwd()}/db/models/admin/superAdmin`);
+const usersOtp = require(`${process.cwd()}/db/models/auth/usersOtp`);
 const { createDoctor } = require(`${process.cwd()}/db/models/doctor/doctor`);
 
 const sendWelcomeEmail = require(`${process.cwd()}/modules/auth/services/sendWelcomeEmail`);
 
-const roleSignUpHandlers = {
-    1: createSuperAdmin,
-    2: createAdmin,
-    5: createDoctor,
-};
 
 const signUp = catchAsync(async (req, res, next) => {
     const body = req.body;
@@ -24,22 +18,40 @@ const signUp = catchAsync(async (req, res, next) => {
         return next(new AppError('Request body is empty', 400));
     }
 
-    const role = await roles.findByPk(body.roleId);
+    const role = await roles.findByPk(5);
 
-
-    if (!role) {
-        return next(new AppError('Role not found', 404));
-    }
-
-    const roleHandler = roleSignUpHandlers[body.roleId];
-
-    if (!roleHandler) {
+    if (!role || role.name.toLowerCase() !== 'doctor') {
         return next(new AppError('Invalid role', 400));
     }
+
+    const userData = await authUser.findOne({
+        where: {
+            email: body.email
+        }
+    });
+
+    if (userData) {
+        return next(new AppError('Email already exists', 400));
+    }
+
+
 
     const transaction = await sequelize.transaction();
 
     try {
+
+
+        const otpUser = await usersOtp.findOne({
+            where: {
+                email: body.email
+            },
+            transaction
+        });
+
+
+        if (otpUser && !otpUser.isVerified) {
+            return next(new AppError('This email is not verified', 400));
+        }
 
         const newUser = await authUser.create({
             roleId: role.id,
@@ -56,7 +68,7 @@ const signUp = catchAsync(async (req, res, next) => {
 
 
 
-        const { newUserDate, accessToken } = await roleHandler(
+        const { newUserDate, accessToken } = await createDoctor(
             {
                 authId: newUser.id,
                 roleName: role.name,
@@ -99,7 +111,7 @@ const signUp = catchAsync(async (req, res, next) => {
         // } catch (err) {
         //     console.log(err);
         // }
-
+        await otpUser.destroy();
         return res.status(201).json({
             status: 'success',
             tokens: {

@@ -122,7 +122,9 @@ const authUser = sequelize.define(
 authUser.belongsTo(role, {
   foreignKey: 'roleId',
   targetKey: 'id',
-  constraints: false
+  as: 'role',
+  constraints: false,
+
 });
 
 

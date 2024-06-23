@@ -82,7 +82,7 @@ cases.belongsTo(doctor, {
 
 cases.belongsTo(admin, {
   foreignKey: 'adminId',
-  targetKey: 'adminId',
+  targetKey: 'userId',
   as: 'admin',
   constraints: false
 });
