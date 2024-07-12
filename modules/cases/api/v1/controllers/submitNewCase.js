@@ -6,7 +6,7 @@ const caseStatus = require(`${process.cwd()}/db/models/doctor/caseStatus`);
 
 const catchAsync = require(`${process.cwd()}/utils/errors/catchAsync`);
 const AppError = require(`${process.cwd()}/utils/errors/appError`);
-const { getDoctorIdFromToken } = require(`${process.cwd()}/utils/token/getIdFromToken`);
+const { getUserIdFromToken } = require(`${process.cwd()}/utils/token/getIdFromToken`);
 
 const submitNewCase = catchAsync(async (req, res, next) => {
 
@@ -18,7 +18,7 @@ const submitNewCase = catchAsync(async (req, res, next) => {
     }
 
 
-    const doctorId = getDoctorIdFromToken(req.headers.authorization.split(' ')[1]);
+    const doctorId = getUserIdFromToken(req.headers.authorization.split(' ')[1]);
 
     if (doctorId) {
 

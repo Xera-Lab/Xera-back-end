@@ -1,0 +1,11 @@
+const CaseStatus = {
+    NEWCASE: 'NEWCASE',
+    INPROGRESS: 'INPROGRESS',
+    SENTTOREVIEW: 'SENTTOREVIEW',
+    INREVIEW: 'INREVIEW',
+    REQUESTCHANGES: 'REQUESTCHANGES',
+    FINISHED: 'FINISHED'
+};
+
+
+module.exports = { CaseStatus }

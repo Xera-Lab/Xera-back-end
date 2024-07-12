@@ -20,6 +20,7 @@ const updateRole = catchAsync(async (req, res, next) => {
     }
 
     role.name = body.name;
+    role.displayName = body.name.toUpperCase().replace(/ /g, '');
 
     await role.save();
 

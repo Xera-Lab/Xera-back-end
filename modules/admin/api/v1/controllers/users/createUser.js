@@ -19,7 +19,7 @@ const createUser = catchAsync(async (req, res, next) => {
 
     const role = await roles.findByPk(body.roleId);
 
-    if (!role || role.name.toLowerCase() === 'doctor') {
+    if (!role || role.name === 'DOCTOR') {
         return next(new AppError('Invalid role', 400));
     }
 
@@ -44,7 +44,7 @@ const createUser = catchAsync(async (req, res, next) => {
 
 
 
-        const { newUserDate, accessToken } = await createAdmin(
+        const { newUserDate } = await createAdmin(
             {
                 authId: newUser.id,
                 roleName: role.name,
@@ -75,20 +75,8 @@ const createUser = catchAsync(async (req, res, next) => {
         await transaction.commit();
 
 
-        // try {
-        //     sendWelcomeEmail({
-        //         email: result.email,
-        //         name: result.firstName + ' ' + result.lastName,
-        //     });
-        // } catch (err) {
-        //     console.log(err);
-        // }
-
         return res.status(201).json({
             status: 'success',
-            tokens: {
-                accessToken: accessToken
-            },
             data: result,
         });
 

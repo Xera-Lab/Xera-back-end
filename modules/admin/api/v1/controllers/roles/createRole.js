@@ -22,11 +22,14 @@ const createRole = catchAsync(async (req, res, next) => {
         return next(new AppError('Role already exists', 400));
     }
 
+
     const newRole = await roles.create({
-        name: body.name
+        name: body.name,
+        displayName: body.name.toUpperCase().replace(/ /g, ''),
     });
 
     const result = newRole.toJSON();
+
     return res.status(201).json({
         status: 'success',
         data: result,

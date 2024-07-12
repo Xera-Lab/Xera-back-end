@@ -20,7 +20,7 @@ const signUp = catchAsync(async (req, res, next) => {
 
     const role = await roles.findByPk(5);
 
-    if (!role || role.name.toLowerCase() !== 'doctor') {
+    if (!role || role.name !== 'DOCTOR') {
         return next(new AppError('Invalid role', 400));
     }
 

@@ -18,7 +18,7 @@ const s3Client = new S3Client({
 const uploadFileToS3 = async (caseId, file) => {
     const params = {
         Bucket: process.env.AWS_S3_BUCKET_NAME,
-        Key: `Cases/${caseId}/${Date.now()}_${file.originalname}`, // File name you want to save as in S3
+        Key: `Cases/${caseId}/Original.${file.originalname.split('.').pop()}`, // File name you want to save as in S3
         Body: file.buffer,
         // ACL: 'public-read' // Access control for the file
     };

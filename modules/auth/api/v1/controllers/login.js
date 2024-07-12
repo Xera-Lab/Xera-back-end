@@ -13,7 +13,6 @@ const { getDoctor } = require(`${process.cwd()}/db/models/doctor/doctor`);
 
 const roleLoginHandlers = {
     1: getSuperAdmin,
-    2: getAdmin,
     5: getDoctor,
 };
 
@@ -46,11 +45,12 @@ const login = catchAsync(async (req, res, next) => {
     }
 
     if (req.headers['x-admin-key'] && req.headers['x-admin-key'] === process.env.ADMIN_KEY) {
-        console.log(req.headers['x-admin-key']);
-        console.log(authUserData.role.name.toLowerCase());
-
-        if (authUserData.role.name.toLowerCase() === 'doctor') {
+        if (authUserData.role.name === 'DOCTOR') {
             return next(new AppError('Invalid role', 400));
+        }
+    } else {
+        if (authUserData.role.name !== 'DOCTOR') {
+            return next(new AppError('User not found', 404));
         }
     }
 
@@ -59,7 +59,10 @@ const login = catchAsync(async (req, res, next) => {
         return next(new AppError('Incorrect password', 401));
     }
 
-    const { userData, accessToken } = await roleLoginHandlers[authUserData.role.id](authUserData);
+    console.log(authUserData.role.id);
+    console.log(roleLoginHandlers[authUserData.role.id] || getAdmin);
+
+    const { userData, accessToken } = await (roleLoginHandlers[authUserData.role.id] || getAdmin)(authUserData);
 
 
 

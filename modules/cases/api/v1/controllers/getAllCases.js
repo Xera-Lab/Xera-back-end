@@ -3,14 +3,45 @@ const cases = require(`${process.cwd()}/db/models/doctor/cases`);
 const services = require(`${process.cwd()}/db/models/services/services`);
 const caseStatus = require(`${process.cwd()}/db/models/doctor/caseStatus`);
 const { doctor } = require(`${process.cwd()}/db/models/doctor/doctor`);
+const { getUserIdFromToken } = require(`${process.cwd()}/utils/token/getIdFromToken`);
+const { getPaginationData } = require(`${process.cwd()}/utils/pagination/getPaginationData`);
+
+
 
 const catchAsync = require(`${process.cwd()}/utils/errors/catchAsync`);
 const AppError = require(`${process.cwd()}/utils/errors/appError`);
+const { where } = require('sequelize');
+const url = require('url');
 
 
 const getAllCases = catchAsync(async (req, res, next) => {
 
-    const casesData = await cases.findAll({
+    const queryParams = url.parse(req.url, true).query;
+
+    const userId = getUserIdFromToken(req.headers.authorization.split(' ')[1]);
+
+    if (userId === null) {
+        return next(new AppError('Invalid token', 401));
+    }
+
+    var whereCondition = null;
+
+    if (userId.split('_')[0] === 'DOCTOR') {
+        whereCondition = {
+            doctorId: userId,
+        };
+    } else if (userId.split('_')[0] === 'SUPER') {
+        whereCondition = null;
+    } else {
+        whereCondition = {
+            assigneeId: userId,
+        };
+    }
+
+
+    const response = await cases.findAndCountAll({
+        limit: queryParams.size,
+        offset: ((queryParams.page - 1) * queryParams.size) || 0,
         include: [
             {
                 model: services,
@@ -18,22 +49,24 @@ const getAllCases = catchAsync(async (req, res, next) => {
             },
             {
                 model: caseStatus,
-                as: 'status'
+                as: 'status',
+                where: queryParams.status ? { status: queryParams.status, } : null,
             },
             {
                 model: doctor,
                 as: 'doctor'
             }
         ],
-
+        where: whereCondition,
         order: [['updatedAt', 'DESC']],
     });
 
-    if (!casesData) {
+    if (!response) {
         return next(new AppError('Cases not found', 404));
     }
 
-    const jsonDate = casesData.map(element => element.toJSON());
+    const pagination = getPaginationData(response.count, queryParams.page, queryParams.size)
+    const jsonDate = response.rows.map(element => element.toJSON());
 
     jsonDate.forEach(element => {
         if (element) {
@@ -65,7 +98,8 @@ const getAllCases = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
         status: 'success',
-        data: jsonDate
+        data: jsonDate,
+        pagination: pagination,
     });
 });
 

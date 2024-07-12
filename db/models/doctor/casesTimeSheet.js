@@ -3,6 +3,7 @@ const { DataTypes } = require('sequelize');
 
 const sequelize = require(`${process.cwd()}/config/database`);
 const cases = require(`${process.cwd()}/db/models/doctor/cases`);
+const caseStatus = require(`${process.cwd()}/db/models/doctor/caseStatus`);
 
 const casesTimeSheet = sequelize.define(
   'cases_time_sheet',
@@ -16,6 +17,10 @@ const casesTimeSheet = sequelize.define(
     caseId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },
+    caseStatus: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
     },
     assigneeId: {
       type: DataTypes.STRING,
@@ -49,6 +54,12 @@ casesTimeSheet.belongsTo(cases, {
   constraints: false
 });
 
+casesTimeSheet.belongsTo(caseStatus, {
+  foreignKey: 'caseStatus',
+  targetKey: 'id',
+  as: 'status',
+  constraints: false
+});
 
 
 module.exports = casesTimeSheet;

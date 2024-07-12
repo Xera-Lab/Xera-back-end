@@ -5,6 +5,7 @@ const { admin } = require(`${process.cwd()}/db/models/admin/admin`);
 const roles = require(`${process.cwd()}/db/models/auth/role`);
 
 const { superAdmin } = require(`${process.cwd()}/db/models/admin/superAdmin`);
+const { getPaginationData } = require(`${process.cwd()}/utils/pagination/getPaginationData`);
 const authUser = require(`${process.cwd()}/db/models/auth/authUser`);
 
 const url = require('url');
@@ -29,7 +30,8 @@ const getAllUsers = catchAsync(async (req, res, next) => {
                             name: queryParams.role
                         } : null,
                         required: true,
-                        attributes: ['name'],
+                        attributes: ['name', 'display_name'],
+
                     },
                 ],
                 attributes: ['id', 'firstName', 'lastName', 'email'],
@@ -39,28 +41,12 @@ const getAllUsers = catchAsync(async (req, res, next) => {
         order: [['updatedAt', 'DESC']],
     });
 
-
-    var nextPage = Number(queryParams.page) + 1;
-    var prevPage = queryParams.page - 1;
-
-    if (nextPage > response.count) {
-        nextPage = null;
-    }
-
-    if (prevPage === 0) {
-        prevPage = null;
-    }
-
-
+    var pagination = getPaginationData(response.count, queryParams.page || 1, queryParams.size);
 
     return res.status(200).json({
         status: 'success',
         data: response.rows,
-        pagination: {
-            total: response.count,
-            nextPage: nextPage,
-            prevPage: prevPage,
-        }
+        pagination: pagination,
     });
 });
 
