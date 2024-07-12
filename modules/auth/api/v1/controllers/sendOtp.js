@@ -57,7 +57,7 @@ const sendOtp = catchAsync(async (req, res, next) => {
 
     if (otpUser) {
         otpUser.otp = otp;
-        otpUser.expireAt = new Date(Date.now() + 5 * 60 * 1000);
+        otpUser.expireAt = new Date(Date.now() + 1 * 60 * 1000);
         otpUser.counter = otpUser.counter + 1;
 
         await otpUser.save();
@@ -65,7 +65,7 @@ const sendOtp = catchAsync(async (req, res, next) => {
         const otpData = await usersOtp.create({
             email: email,
             otp: otp,
-            expireAt: new Date(Date.now() + 5 * 60 * 1000),
+            expireAt: new Date(Date.now() + 1 * 60 * 1000),
         });
 
         if (!otpData) {

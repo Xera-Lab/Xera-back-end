@@ -48,12 +48,16 @@ const signUp = catchAsync(async (req, res, next) => {
             transaction
         });
 
+        if (otpUser == null) {
+            throw new AppError('Something went wrong!', 400);
+        }
 
-        if (otpUser && !otpUser.isVerified) {
-            return next(new AppError('This email is not verified', 400));
+        if (!otpUser.isVerified) {
+            throw new AppError('Something went wrong!', 400);
         }
 
         const newUser = await authUser.create({
+
             roleId: role.id,
             firstName: body.firstName,
             lastName: body.lastName,
@@ -121,8 +125,8 @@ const signUp = catchAsync(async (req, res, next) => {
         });
 
     } catch (error) {
-        await transaction.rollback();
         console.log(error);
+        await transaction.rollback();
         return next(error);
     }
 
