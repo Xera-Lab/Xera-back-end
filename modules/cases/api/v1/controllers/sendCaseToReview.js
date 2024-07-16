@@ -14,48 +14,24 @@ const casesTimeSheet = require(`${process.cwd()}/db/models/doctor/casesTimeSheet
 const catchAsync = require(`${process.cwd()}/utils/errors/catchAsync`);
 const { CaseStatus } = require(`${process.cwd()}/utils/constants/enums`);
 const AppError = require(`${process.cwd()}/utils/errors/appError`);
+const AwsConfig = require(`${process.cwd()}/utils/aws/awsConfig`);
 
-const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
-
-const s3Client = new S3Client({
-    region: process.env.AWS_REGION,
-    credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-    }
-});
-
-const uploadFileToS3 = async (caseId, file) => {
-    const params = {
-        Bucket: process.env.AWS_S3_BUCKET_NAME,
-        Key: `Cases/${caseId}/Submited.${file.originalname.split('.').pop()}`, // File name you want to save as in S3
-        Body: file.buffer,
-        // ACL: 'public-read' // Access control for the file
-    };
-
-    try {
-        const command = new PutObjectCommand(params);
-        const data = await s3Client.send(command);
-        const fileUrl = `https://${params.Bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${params.Key}`;
-        return fileUrl;
-    } catch (error) {
-        console.error('Error uploading file:', error);
-        throw new Error('Error uploading file');
-    }
-};
 
 
 const sendCaseToReview = catchAsync(async (req, res, next) => {
     const transaction = await sequelize.transaction();
-    // const file = req.file;
-
-    // if (!file || file.length === 0) {
-    //     return next(new AppError('No files uploaded', 400));
-    // }
 
     try {
 
+        const file = req.file;
 
+        if (!file || file.length === 0) {
+            return next(new AppError('No files uploaded', 400));
+        }
+
+        if (file.originalname.split('.').pop() !== 'zip') {
+            return next(new AppError('Only zip files are allowed', 400));
+        }
 
         const caseId = req.params.caseId;
 
@@ -101,6 +77,10 @@ const sendCaseToReview = catchAsync(async (req, res, next) => {
             }
         });
 
+        if (!caseStatusDate) {
+            return next(new AppError('Send to review status not found', 404));
+        }
+
         const casesTimeSheetData = await casesTimeSheet.findOne({
             where: {
                 caseId: caseId,
@@ -112,13 +92,12 @@ const sendCaseToReview = catchAsync(async (req, res, next) => {
             return next(new AppError('This case is not assigned to any user', 404));
         }
 
-        if (!caseStatusDate) {
-            return next(new AppError('Send to review status not found', 404));
+
+        if (casesTimeSheetData.assigneeId !== userId) {
+            return next(new AppError('This case is not assigned to you', 400));
         }
 
-        caseData.statusId = caseStatusDate.id;
 
-        await caseData.save({ transaction });
 
         await casesTimeSheet.update(
             {
@@ -129,22 +108,28 @@ const sendCaseToReview = catchAsync(async (req, res, next) => {
                 {
                     caseId: caseId,
                     endDate: null,
-                }
+                },
+                transaction
             },
-            { transaction }
         );
 
         await casesTimeSheet.create(
             {
                 caseId: caseId,
-                assigneeId: casesTimeSheetData.assigneeId,
+                assigneeId: caseData.supervisorId,
                 caseStatus: caseStatusDate.id,
                 startDate: new Date(),
             },
             { transaction }
         );
 
-        // await uploadFileToS3(caseId, file);
+        const fileName = `Cases/${caseId}/Submited.${file.originalname.split('.').pop()}`;
+        const fileUrl = await AwsConfig.uploadFileToS3(fileName, file);
+
+        caseData.statusId = caseStatusDate.id;
+        caseData.techCaseUrl = fileUrl;
+
+        await caseData.save({ transaction });
 
         await transaction.commit();
 

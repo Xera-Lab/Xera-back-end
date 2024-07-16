@@ -30,8 +30,12 @@ const getAllCases = catchAsync(async (req, res, next) => {
         whereCondition = {
             doctorId: userId,
         };
-    } else if (userId.split('_')[0] === 'SUPER') {
+    } else if (userId.split('_')[0] === 'SUPER' || userId.split('_')[0] === 'ADMIN') {
         whereCondition = null;
+    } else if (userId.split('_')[0] === 'SUPERVISOR') {
+        whereCondition = {
+            adminId: userId,
+        };
     } else {
         whereCondition = {
             assigneeId: userId,

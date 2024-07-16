@@ -7,5 +7,13 @@ const CaseStatus = {
     FINISHED: 'FINISHED'
 };
 
+const OtpTypes = {
+    REGISTER: 'REGISTER',
+    RESETPASSWORD: 'RESETPASSWORD',
+    CHANGEPASSWORD: 'CHANGEPASSWORD',
 
-module.exports = { CaseStatus }
+};
+
+
+
+module.exports = { CaseStatus, OtpTypes }

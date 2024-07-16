@@ -20,6 +20,11 @@ const usersOtp = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        otpType:
+        {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
         expireAt: {
             type: DataTypes.DATE,
             allowNull: false,

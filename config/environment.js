@@ -4,6 +4,7 @@ module.exports = {
     development: {
         username: process.env.POSTGRES_USER,
         password: process.env.LOCAL_POSTGRES_PASSWORD,
+        // password: process.env.POSTGRES_PASSWORD,
         database: process.env.POSTGRES_DB,
         port: process.env.DB_PORT,
         host: process.env.POSTGRES_HOST || 'localhost',

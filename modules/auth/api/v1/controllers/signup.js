@@ -43,7 +43,8 @@ const signUp = catchAsync(async (req, res, next) => {
 
         const otpUser = await usersOtp.findOne({
             where: {
-                email: body.email
+                email: body.email,
+                otpType: OtpTypes.REGISTER,
             },
             transaction
         });
@@ -57,7 +58,6 @@ const signUp = catchAsync(async (req, res, next) => {
         }
 
         const newUser = await authUser.create({
-
             roleId: role.id,
             firstName: body.firstName,
             lastName: body.lastName,
@@ -115,7 +115,9 @@ const signUp = catchAsync(async (req, res, next) => {
         // } catch (err) {
         //     console.log(err);
         // }
+
         await otpUser.destroy();
+
         return res.status(201).json({
             status: 'success',
             tokens: {

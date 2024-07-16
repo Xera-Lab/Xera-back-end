@@ -3,6 +3,7 @@ const usersOtp = require(`${process.cwd()}/db/models/auth/usersOtp`);
 const authUser = require(`${process.cwd()}/db/models/auth/authUser`);
 const catchAsync = require(`${process.cwd()}/utils/errors/catchAsync`);
 const AppError = require(`${process.cwd()}/utils/errors/appError`);
+const { OtpTypes } = require(`${process.cwd()}/utils/constants/enums`);
 
 
 
@@ -14,12 +15,13 @@ const verifyOtp = catchAsync(async (req, res, next) => {
         return next(new AppError('Request body is empty', 400));
     }
 
-    const { email, otp } = req.body;
+    const { email, otp, otpType } = req.body;
 
 
     const otpUser = await usersOtp.findOne({
         where: {
-            email
+            email: email,
+            otpType: otpType,
         },
     });
 

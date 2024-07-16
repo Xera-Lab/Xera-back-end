@@ -3,6 +3,7 @@ const usersOtp = require(`${process.cwd()}/db/models/auth/usersOtp`);
 const authUser = require(`${process.cwd()}/db/models/auth/authUser`);
 const catchAsync = require(`${process.cwd()}/utils/errors/catchAsync`);
 const AppError = require(`${process.cwd()}/utils/errors/appError`);
+const { OtpTypes } = require(`${process.cwd()}/utils/constants/enums`);
 
 
 const sendOtpEmail = require(`${process.cwd()}/modules/auth/services/sendOtpEmail`);
@@ -15,11 +16,17 @@ const sendOtp = catchAsync(async (req, res, next) => {
         return next(new AppError('Request body is empty', 400));
     }
 
-    const { email } = req.body;
+    const { email, otpType } = req.body;
 
     if (!email) {
         return next(new AppError('Email is required', 400));
     }
+
+
+    if (!otpType) {
+        return next(new AppError('Otp type is required', 400));
+    }
+
 
     const authUserData = await authUser.findOne({
         where: {
@@ -27,14 +34,20 @@ const sendOtp = catchAsync(async (req, res, next) => {
         },
     });
 
-
-    if (authUserData) {
-        return next(new AppError('User already exists', 400));
+    if (otpType === OtpTypes.REGISTER) {
+        if (authUserData) {
+            return next(new AppError('User already exists', 400));
+        }
+    } else {
+        if (!authUserData) {
+            return next(new AppError('User not found', 404));
+        }
     }
 
     const otpUser = await usersOtp.findOne({
         where: {
-            email
+            email: email,
+            otpType: otpType
         },
     });
 
@@ -51,6 +64,7 @@ const sendOtp = catchAsync(async (req, res, next) => {
 
 
     const otp = Math.floor(100000 + Math.random() * 900000);
+
     console.log(otp);
 
     // await sendOtpEmail(email, otp);
@@ -65,6 +79,7 @@ const sendOtp = catchAsync(async (req, res, next) => {
         const otpData = await usersOtp.create({
             email: email,
             otp: otp,
+            otpType: otpType,
             expireAt: new Date(Date.now() + 1 * 60 * 1000),
         });
 

@@ -47,6 +47,7 @@ const startWorkOnCase = catchAsync(async (req, res, next) => {
         if (!caseData) {
             return next(new AppError('Cases not found', 404));
         }
+
         const userId = getUserIdFromToken(req.headers.authorization.split(' ')[1]);
 
         if (caseData.assigneeId !== userId) {
@@ -75,10 +76,11 @@ const startWorkOnCase = catchAsync(async (req, res, next) => {
         }
 
         if (!caseStatusDate) {
-            return next(new AppError('Start status not found', 404));
+            return next(new AppError('Inprogress status not found', 404));
         }
 
         caseData.statusId = caseStatusDate.id;
+
         await caseData.save({ transaction });
 
         await casesTimeSheet.update(

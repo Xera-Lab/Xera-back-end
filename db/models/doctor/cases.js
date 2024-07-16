@@ -33,6 +33,11 @@ const cases = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    techCaseUrl:
+    {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
     numberOfTooth: {
       type: DataTypes.ARRAY(DataTypes.INTEGER),
       allowNull: true,
@@ -50,6 +55,11 @@ const cases = sequelize.define(
       allowNull: true,
     },
     assigneeId: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    supervisorId:
+    {
       type: DataTypes.STRING,
       allowNull: true,
     },
