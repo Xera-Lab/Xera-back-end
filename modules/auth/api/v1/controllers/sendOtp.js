@@ -53,13 +53,12 @@ const sendOtp = catchAsync(async (req, res, next) => {
 
 
     if (otpUser) {
-        if (otpUser.expireAt > new Date()) {
-            return next(new AppError('OTP already sent', 400));
-        }
 
         if (otpUser.counter > 3) {
             return next(new AppError('OTP limit exceeded', 400));
         }
+
+
     }
 
 
@@ -75,7 +74,9 @@ const sendOtp = catchAsync(async (req, res, next) => {
         otpUser.counter = otpUser.counter + 1;
 
         await otpUser.save();
+
     } else {
+
         const otpData = await usersOtp.create({
             email: email,
             otp: otp,
