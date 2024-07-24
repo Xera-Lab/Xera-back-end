@@ -25,14 +25,6 @@ const casesReview = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: true,
     },
-    startDate: {
-      allowNull: false,
-      type: DataTypes.DATE
-    },
-    endDate: {
-      allowNull: true,
-      type: DataTypes.DATE
-    },
     deletedAt: {
       type: DataTypes.DATE,
     },

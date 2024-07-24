@@ -49,9 +49,10 @@ const requestCaseChanges = catchAsync(async (req, res, next) => {
         if (!caseData) {
             return next(new AppError('Cases not found', 404));
         }
+
         const userId = getUserIdFromToken(req.headers.authorization.split(' ')[1]);
 
-        if (caseData.adminId !== userId) {
+        if (caseData.supervisorId !== userId) {
             return next(new AppError('This case is not assigned to you', 400));
         }
 
@@ -100,40 +101,25 @@ const requestCaseChanges = catchAsync(async (req, res, next) => {
         await casesTimeSheet.create(
             {
                 caseId: caseId,
-                assigneeId: casesTimeSheetData.assigneeId,
+                assigneeId: caseData.assigneeId,
                 caseStatus: caseStatusDate.id,
                 startDate: new Date(),
             },
             { transaction }
         );
 
-        const casesReviewData = await casesReview.findOne({
-            where: {
-                caseId: caseId,
-                reviewerId: caseData.adminId,
-                endDate: null,
-            }
-        });
+        await casesReview.create({
+            caseId: caseId,
+            reviewerId: userId,
+            comment: req.body.comment
+        }, { transaction });
 
-        if (!casesReviewData) {
-            return next(new AppError('Case review not found', 404));
-        } else {
-            await casesReview.update({
-                comment: req.body.comment,
-                endDate: new Date(),
-            }, {
-                where: {
-                    caseId: caseId,
-                    endDate: null,
-                }
-            }, { transaction });
-        }
 
         await transaction.commit();
 
         res.status(200).json({
             status: 'success',
-            message: 'Case started successfully',
+            message: 'Changes requested successfully',
         });
     } catch (error) {
         console.log(error);

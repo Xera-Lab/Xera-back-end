@@ -11,6 +11,7 @@ const finishCase = require(`${process.cwd()}/modules/cases/api/v1/controllers/fi
 const uploadCaseFiles = require(`${process.cwd()}/modules/cases/api/v1/controllers/uploadCaseFiles`);
 const caseDownloadUrl = require(`${process.cwd()}/modules/cases/api/v1/controllers/caseDownloadUrl`);
 const assignCaseToSupervisor = require(`${process.cwd()}/modules/cases/api/v1/controllers/assignCaseToSupervisor`);
+const getCasesCountByStatus = require(`${process.cwd()}/modules/cases/api/v1/controllers/getCasesCountByStatus`);
 
 const verifyToken = require(`${process.cwd()}/utils/middleware/authentication/verifyToken`);
 const verifyPermision = require(`${process.cwd()}/utils/middleware/authorization/verifyPermision`);
@@ -24,6 +25,8 @@ const casesRouter = express.Router();
 // casesRouter.route('/get_all_cases').get(verifyToken, verifyPermision('get_all_cases'), getAllCases);
 casesRouter.route('/get-all-cases').get(verifyToken, getAllCases);
 casesRouter.route('/submit-case').post(verifyToken, submitNewCase);
+casesRouter.route('/get-cases-count').get(verifyToken, getCasesCountByStatus);
+
 casesRouter.route('/:caseId').get(verifyToken, getCaseById);
 casesRouter.route('/:caseId').delete(verifyToken, deleteCase);
 casesRouter.route('/:caseId/upload').post(verifyToken, upload.single('file'), uploadCaseFiles);

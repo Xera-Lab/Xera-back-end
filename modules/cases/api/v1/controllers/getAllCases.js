@@ -10,7 +10,6 @@ const { getPaginationData } = require(`${process.cwd()}/utils/pagination/getPagi
 
 const catchAsync = require(`${process.cwd()}/utils/errors/catchAsync`);
 const AppError = require(`${process.cwd()}/utils/errors/appError`);
-const { where } = require('sequelize');
 const url = require('url');
 
 
@@ -34,13 +33,14 @@ const getAllCases = catchAsync(async (req, res, next) => {
         whereCondition = null;
     } else if (userId.split('_')[0] === 'SUPERVISOR') {
         whereCondition = {
-            adminId: userId,
+            supervisorId: userId,
         };
     } else {
         whereCondition = {
             assigneeId: userId,
         };
     }
+
 
 
     const response = await cases.findAndCountAll({
@@ -54,7 +54,7 @@ const getAllCases = catchAsync(async (req, res, next) => {
             {
                 model: caseStatus,
                 as: 'status',
-                where: queryParams.status ? { status: queryParams.status, } : null,
+                where: queryParams.status && queryParams.status !== 'ALL' ? { status: queryParams.status, } : null,
             },
             {
                 model: doctor,

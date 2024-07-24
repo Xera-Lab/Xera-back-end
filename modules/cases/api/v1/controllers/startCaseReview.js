@@ -4,7 +4,6 @@ const sequelize = require(`${process.cwd()}/config/database`);
 const cases = require(`${process.cwd()}/db/models/doctor/cases`);
 const services = require(`${process.cwd()}/db/models/services/services`);
 const caseStatus = require(`${process.cwd()}/db/models/doctor/caseStatus`);
-const casesReview = require(`${process.cwd()}/db/models/doctor/casesReview`);
 const { doctor } = require(`${process.cwd()}/db/models/doctor/doctor`);
 const { authUser } = require(`${process.cwd()}/db/models/auth/authUser`);
 const { getUserIdFromToken } = require(`${process.cwd()}/utils/token/getIdFromToken`);
@@ -51,7 +50,7 @@ const startCaseReview = catchAsync(async (req, res, next) => {
 
         const userId = getUserIdFromToken(req.headers.authorization.split(' ')[1]);
 
-        if (caseData.adminId !== userId) {
+        if (caseData.supervisorId !== userId) {
             return next(new AppError('This case is not assigned to you', 400));
         }
 
@@ -81,6 +80,7 @@ const startCaseReview = catchAsync(async (req, res, next) => {
         }
 
         caseData.statusId = caseStatusDate.id;
+
         await caseData.save({ transaction });
 
         await casesTimeSheet.update(
@@ -100,19 +100,12 @@ const startCaseReview = catchAsync(async (req, res, next) => {
         await casesTimeSheet.create(
             {
                 caseId: caseId,
-                assigneeId: casesTimeSheetData.assigneeId,
+                assigneeId: userId,
                 caseStatus: caseStatusDate.id,
                 startDate: new Date(),
             },
             { transaction }
         );
-
-
-        await casesReview.create({
-            caseId: caseId,
-            reviewerId: caseData.adminId,
-            startDate: new Date(),
-        }, { transaction });
 
 
         await transaction.commit();

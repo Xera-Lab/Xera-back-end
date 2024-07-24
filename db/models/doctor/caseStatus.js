@@ -16,6 +16,10 @@ const caseStatus = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false
     },
+    displayName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE

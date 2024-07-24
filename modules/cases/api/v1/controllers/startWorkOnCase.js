@@ -100,7 +100,7 @@ const startWorkOnCase = catchAsync(async (req, res, next) => {
         await casesTimeSheet.create(
             {
                 caseId: caseId,
-                assigneeId: casesTimeSheetData.assigneeId,
+                assigneeId: userId,
                 caseStatus: caseStatusDate.id,
                 startDate: new Date(),
             },
@@ -114,6 +114,8 @@ const startWorkOnCase = catchAsync(async (req, res, next) => {
             status: 'success',
             message: 'Case started successfully',
         });
+
+
     } catch (error) {
         console.log(error);
         await transaction.rollback();

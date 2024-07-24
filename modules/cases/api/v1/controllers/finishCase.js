@@ -50,7 +50,7 @@ const finishCase = catchAsync(async (req, res, next) => {
 
         const userId = getUserIdFromToken(req.headers.authorization.split(' ')[1]);
 
-        if (caseData.adminId !== userId) {
+        if (caseData.supervisorId !== userId) {
             return next(new AppError('This case is not assigned to you', 400));
         }
 
@@ -82,29 +82,9 @@ const finishCase = catchAsync(async (req, res, next) => {
         caseData.statusId = caseStatusDate.id;
         await caseData.save({ transaction });
 
-        await casesTimeSheet.update(
-            {
-                endDate: new Date(),
-            },
-            {
-                where:
-                {
-                    caseId: caseId,
-                    endDate: null,
-                }
-            },
-            { transaction }
-        );
+        casesTimeSheetData.endDate = new Date();
 
-        await casesTimeSheet.create(
-            {
-                caseId: caseId,
-                assigneeId: casesTimeSheetData.assigneeId,
-                caseStatus: caseStatusDate.id,
-                startDate: new Date(),
-            },
-            { transaction }
-        );
+        await casesTimeSheetData.save({ transaction });
 
 
         await transaction.commit();

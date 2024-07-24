@@ -15,8 +15,8 @@ const servicesRouter = express.Router();
 servicesRouter.route('/create-service').post(verifyToken, addNewService);
 servicesRouter.route('/update-service/:id').post(verifyToken, updateService);
 servicesRouter.route('/delete-service/:id').delete(verifyToken, deleteService);
-servicesRouter.route('/get-service/:id').get(verifyToken, getService);
-servicesRouter.route('/get-all-service').get(verifyToken, getAllService);
+servicesRouter.route('/get-service/:id').get(getService);
+servicesRouter.route('/get-all-service').get(getAllService);
 
 
 module.exports = servicesRouter;
