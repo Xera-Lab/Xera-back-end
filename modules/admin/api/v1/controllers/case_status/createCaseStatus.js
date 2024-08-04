@@ -16,6 +16,7 @@ const createCaseStatus = catchAsync(async (req, res, next) => {
         where: {
             status: body.status
         }
+
     })
 
     if (isExists) {

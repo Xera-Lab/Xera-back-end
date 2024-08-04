@@ -4,6 +4,7 @@ const services = require(`${process.cwd()}/db/models/services/services`);
 const caseStatus = require(`${process.cwd()}/db/models/doctor/caseStatus`);
 const { doctor } = require(`${process.cwd()}/db/models/doctor/doctor`);
 const { authUser } = require(`${process.cwd()}/db/models/auth/authUser`);
+const casesReview = require(`${process.cwd()}/db/models/doctor/casesReview`);
 
 const catchAsync = require(`${process.cwd()}/utils/errors/catchAsync`);
 const AppError = require(`${process.cwd()}/utils/errors/appError`);
@@ -40,6 +41,8 @@ const getCaseById = catchAsync(async (req, res, next) => {
 
     const jsonDate = caseData.toJSON();
 
+
+
     if (jsonDate) {
 
         delete jsonDate.createdAt;
@@ -64,6 +67,18 @@ const getCaseById = catchAsync(async (req, res, next) => {
         delete jsonDate.doctor.deletedAt;
         delete jsonDate.doctor.password;
     }
+
+    const reviewData = await casesReview.findAll({
+        where: {
+            caseId
+        }
+    });
+
+
+    if (reviewData) {
+        jsonDate.reviews = reviewData;
+    }
+
 
 
     res.status(200).json({

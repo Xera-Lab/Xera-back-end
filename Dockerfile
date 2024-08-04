@@ -1,8 +1,9 @@
 # Fetching the minified node image on apline linux
-FROM --platform=linux/amd64 node:slim
+# FROM --platform=linux/amd64 node:slim
+FROM node:slim
 
 # Declaring env
-ENV NODE_ENV development
+ENV NODE_ENV local
 
 # Setting up the work directory
 WORKDIR /xera_app

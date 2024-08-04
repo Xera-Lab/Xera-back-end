@@ -51,11 +51,21 @@ const sendOtp = catchAsync(async (req, res, next) => {
         },
     });
 
+    const updatedAt = new Date(otpUser.updatedAt);
+    const oneHourAfterUpdate = new Date(updatedAt.getTime() + 60 * 60 * 1000); // Adding 1 hour in milliseconds
+    const now = new Date();
 
     if (otpUser) {
 
+
         if (otpUser.counter > 3) {
-            return next(new AppError('OTP limit exceeded', 400));
+            console.log(updatedAt);
+            console.log(oneHourAfterUpdate);
+            console.log(now);
+
+            if (now < oneHourAfterUpdate) {
+                return next(new AppError('Please try after 1 hour', 400));
+            }
         }
 
 
@@ -72,6 +82,9 @@ const sendOtp = catchAsync(async (req, res, next) => {
         otpUser.otp = otp;
         otpUser.expireAt = new Date(Date.now() + 1 * 60 * 1000);
         otpUser.counter = otpUser.counter + 1;
+        if (otpUser.counter > 3 && now > oneHourAfterUpdate) {
+            otpUser.counter = 1;
+        }
 
         await otpUser.save();
 

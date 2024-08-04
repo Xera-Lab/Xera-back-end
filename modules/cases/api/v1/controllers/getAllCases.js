@@ -74,9 +74,6 @@ const getAllCases = catchAsync(async (req, res, next) => {
 
     jsonDate.forEach(element => {
         if (element) {
-
-            delete element.createdAt;
-            delete element.updatedAt;
             delete element.deletedAt;
         }
 

@@ -9,11 +9,21 @@ const AppError = require(`${process.cwd()}/utils/errors/appError`);
 const getService = catchAsync(async (req, res, next) => {
 
 
-    const serviceId = req.params.id;
+    const serviceSearchKey = req.params.id;
 
+    var exsistingService;
 
-    const exsistingService = await service.findByPk(serviceId);
+    const intKey = parseInt(serviceSearchKey);
 
+    if (intKey.toString() == 'NaN') {
+        exsistingService = await service.findOne({
+            where: {
+                searchName: serviceSearchKey.toLowerCase(),
+            }
+        })
+    } else {
+        exsistingService = await service.findByPk(parseInt(serviceSearchKey));
+    }
 
     if (!exsistingService) {
         return next(new AppError('Service dose not exists', 404));

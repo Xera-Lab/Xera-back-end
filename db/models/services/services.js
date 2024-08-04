@@ -16,6 +16,11 @@ const service = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false
         },
+        searchName: {
+            allowNull: true,
+            type: DataTypes.STRING,
+
+        },
         price: {
             type: DataTypes.DOUBLE,
             allowNull: false,
@@ -23,6 +28,10 @@ const service = sequelize.define(
         description: {
             type: DataTypes.TEXT,
             allowNull: true,
+        },
+        imageUrl: {
+            allowNull: true,
+            type: DataTypes.STRING
         },
         isActive: {
             type: DataTypes.BOOLEAN,
@@ -48,6 +57,11 @@ const service = sequelize.define(
         schema: 'doctor',
     }
 );
+
+service.beforeCreate((service, options) => {
+    const searchName = service.name.toLowerCase();
+    service.searchName = searchName.replaceAll(' ', '-');
+});
 
 
 

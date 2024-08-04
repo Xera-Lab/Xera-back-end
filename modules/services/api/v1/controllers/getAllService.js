@@ -9,11 +9,21 @@ const AppError = require(`${process.cwd()}/utils/errors/appError`);
 const getAllService = catchAsync(async (req, res, next) => {
 
 
+    var whereCondition = {
+
+    };
+    if (req.headers['x-admin-key'] && req.headers['x-admin-key'] === process.env.ADMIN_KEY) {
+
+        whereCondition = null;
+    } else {
+
+        whereCondition = {
+            isActive: true
+        };
+    }
 
     const servicesList = await service.findAll({
-        where: {
-            isActive: true
-        }
+        where: whereCondition
     });
 
 

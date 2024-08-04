@@ -30,7 +30,7 @@ casesRouter.route('/get-cases-count').get(verifyToken, getCasesCountByStatus);
 casesRouter.route('/:caseId').get(verifyToken, getCaseById);
 casesRouter.route('/:caseId').delete(verifyToken, deleteCase);
 casesRouter.route('/:caseId/upload').post(verifyToken, upload.single('file'), uploadCaseFiles);
-casesRouter.route('/:caseId/download').post(verifyToken, caseDownloadUrl);
+casesRouter.route('/download').post(verifyToken, caseDownloadUrl);
 casesRouter.route('/:caseId/assign').post(verifyToken, assignCase);
 casesRouter.route('/:caseId/assign-supervisor').post(verifyToken, assignCaseToSupervisor);
 casesRouter.route('/:caseId/start-work').post(verifyToken, startWorkOnCase);
