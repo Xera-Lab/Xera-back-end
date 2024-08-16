@@ -51,12 +51,12 @@ const sendOtp = catchAsync(async (req, res, next) => {
         },
     });
 
-    const updatedAt = new Date(otpUser.updatedAt);
-    const oneHourAfterUpdate = new Date(updatedAt.getTime() + 60 * 60 * 1000); // Adding 1 hour in milliseconds
+
     const now = new Date();
 
     if (otpUser) {
-
+        const updatedAt = new Date(otpUser.updatedAt ?? Date.now());
+        const oneHourAfterUpdate = new Date(updatedAt.getTime() + 60 * 60 * 1000); // Adding 1 hour in milliseconds
 
         if (otpUser.counter > 3) {
             console.log(updatedAt);
@@ -76,9 +76,12 @@ const sendOtp = catchAsync(async (req, res, next) => {
 
     console.log(otp);
 
-    // await sendOtpEmail(email, otp);
+    await sendOtpEmail(email, otp);
 
     if (otpUser) {
+        const updatedAt = new Date(otpUser.updatedAt ?? Date.now());
+        const oneHourAfterUpdate = new Date(updatedAt.getTime() + 60 * 60 * 1000); // Adding 1 hour in milliseconds
+
         otpUser.otp = otp;
         otpUser.expireAt = new Date(Date.now() + 1 * 60 * 1000);
         otpUser.counter = otpUser.counter + 1;

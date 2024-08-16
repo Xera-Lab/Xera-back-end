@@ -1,16 +1,22 @@
 const nodemailer = require('nodemailer');
+const { port } = require('pg/lib/defaults');
 
 
 const mailer = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'mail.xeralab.com',
+    port: 465,
     auth: {
-        user: process.env.EMAIL_USER, // Your email address
-        pass: process.env.EMAIL_PASS  // Your email password or app password
+        // user: process.env.EMAIL_USER, // Your email address
+        // pass: process.env.EMAIL_PASS  // Your email password or app password
+        user: 'info@xeralab.com', // Your email address
+        pass: '12345678'  // Your email password or app password
     }
 });
 
 // Verify the connection configuration
 mailer.verify((error, success) => {
+    console.log(process.env.EMAIL_USER);
+    console.log(process.env.EMAIL_PASS);
     if (error) {
         console.error('Error configuring email mailer:', error);
     } else {

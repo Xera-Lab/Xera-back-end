@@ -9,7 +9,6 @@ const getAllRoles = catchAsync(async (req, res, next) => {
     const roleList = await roles.findAll(
         {
             where: {
-
                 name: {
                     [Op.notIn]: ['SUPERADMIN', 'DOCTOR']
                 }

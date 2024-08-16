@@ -33,7 +33,7 @@ const caseDownloadUrl = catchAsync(async (req, res, next) => {
     console.log(key)
     try {
         const params = {
-            Bucket: process.env.AWS_S3_BUCKET_NAME,
+            Bucket: process.env.AWS_S3_CASES_BUCKET_NAME,
             Key: key
         };
 

@@ -19,7 +19,9 @@ const service = sequelize.define(
         searchName: {
             allowNull: true,
             type: DataTypes.STRING,
-
+            get() {
+                return `${this.name}`.toLowerCase().replaceAll(' ', '-')
+            }
         },
         price: {
             type: DataTypes.DOUBLE,
