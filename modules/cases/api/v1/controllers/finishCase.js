@@ -84,6 +84,16 @@ const finishCase = catchAsync(async (req, res, next) => {
 
         casesTimeSheetData.endDate = new Date();
 
+        await casesTimeSheet.create(
+            {
+                caseId: caseId,
+                assigneeId: caseData.doctorId,
+                caseStatus: caseStatusDate.id,
+                startDate: new Date(),
+            },
+            { transaction }
+        );
+
         await casesTimeSheetData.save({ transaction });
 
 

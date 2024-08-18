@@ -4,6 +4,8 @@ const sequelize = require(`${process.cwd()}/config/database`);
 const cases = require(`${process.cwd()}/db/models/doctor/cases`);
 const services = require(`${process.cwd()}/db/models/services/services`);
 const caseStatus = require(`${process.cwd()}/db/models/doctor/caseStatus`);
+const casesReview = require(`${process.cwd()}/db/models/doctor/casesReview`);
+
 const { doctor } = require(`${process.cwd()}/db/models/doctor/doctor`);
 const { authUser } = require(`${process.cwd()}/db/models/auth/authUser`);
 const { getUserIdFromToken } = require(`${process.cwd()}/utils/token/getIdFromToken`);
@@ -16,7 +18,7 @@ const { CaseStatus } = require(`${process.cwd()}/utils/constants/enums`);
 const AppError = require(`${process.cwd()}/utils/errors/appError`);
 
 
-const startWorkOnCase = catchAsync(async (req, res, next) => {
+const doctorRequestCaseChanges = catchAsync(async (req, res, next) => {
     const transaction = await sequelize.transaction();
 
     try {
@@ -50,19 +52,17 @@ const startWorkOnCase = catchAsync(async (req, res, next) => {
 
         const userId = getUserIdFromToken(req.headers.authorization.split(' ')[1]);
 
-        if (caseData.assigneeId !== userId) {
-            return next(new AppError('This case is not assigned to you', 400));
+        if (caseData.doctorId !== userId) {
+            return next(new AppError('You are not authorized', 401));
         }
 
-        if (caseData.status.status !== CaseStatus.NEWCASE &&
-            caseData.status.status !== CaseStatus.REQUESTCHANGES &&
-            caseData.status.status !== CaseStatus.DOCTORREQUESTCHANGES) {
-            return next(new AppError('Can\'t start work on this case', 400));
+        if (caseData.status.status !== CaseStatus.FINISHED) {
+            return next(new AppError('Can\'t rquest changes on this case', 400));
         }
 
         const caseStatusDate = await caseStatus.findOne({
             where: {
-                status: CaseStatus.INPROGRESS
+                status: CaseStatus.DOCTORREQUESTCHANGES
             }
         });
 
@@ -78,11 +78,10 @@ const startWorkOnCase = catchAsync(async (req, res, next) => {
         }
 
         if (!caseStatusDate) {
-            return next(new AppError('Inprogress status not found', 404));
+            return next(new AppError('Start status not found', 404));
         }
 
         caseData.statusId = caseStatusDate.id;
-
         await caseData.save({ transaction });
 
         await casesTimeSheet.update(
@@ -102,22 +101,26 @@ const startWorkOnCase = catchAsync(async (req, res, next) => {
         await casesTimeSheet.create(
             {
                 caseId: caseId,
-                assigneeId: userId,
+                assigneeId: caseData.assigneeId,
                 caseStatus: caseStatusDate.id,
                 startDate: new Date(),
             },
             { transaction }
         );
 
+        await casesReview.create({
+            caseId: caseId,
+            reviewerId: userId,
+            comment: req.body.comment
+        }, { transaction });
+
 
         await transaction.commit();
 
         res.status(200).json({
             status: 'success',
-            message: 'Case started successfully',
+            message: 'Changes requested successfully',
         });
-
-
     } catch (error) {
         console.log(error);
         await transaction.rollback();
@@ -125,4 +128,4 @@ const startWorkOnCase = catchAsync(async (req, res, next) => {
     }
 });
 
-module.exports = startWorkOnCase;
+module.exports = doctorRequestCaseChanges;

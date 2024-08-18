@@ -12,6 +12,8 @@ const uploadCaseFiles = require(`${process.cwd()}/modules/cases/api/v1/controlle
 const caseDownloadUrl = require(`${process.cwd()}/modules/cases/api/v1/controllers/caseDownloadUrl`);
 const assignCaseToSupervisor = require(`${process.cwd()}/modules/cases/api/v1/controllers/assignCaseToSupervisor`);
 const getCasesCountByStatus = require(`${process.cwd()}/modules/cases/api/v1/controllers/getCasesCountByStatus`);
+const doctorApprove = require(`${process.cwd()}/modules/cases/api/v1/controllers/doctorApprove`);
+const doctorRequestCaseChanges = require(`${process.cwd()}/modules/cases/api/v1/controllers/doctorRequestCaseChanges`);
 
 const verifyToken = require(`${process.cwd()}/utils/middleware/authentication/verifyToken`);
 const verifyPermision = require(`${process.cwd()}/utils/middleware/authorization/verifyPermision`);
@@ -39,6 +41,8 @@ casesRouter.route('/:caseId/send-to-review').post(verifyToken, upload.single('fi
 casesRouter.route('/:caseId/start-review').post(verifyToken, startCaseReview);
 casesRouter.route('/:caseId/request-changes').post(verifyToken, requestCaseChanges);
 casesRouter.route('/:caseId/finish-case').post(verifyToken, finishCase);
+casesRouter.route('/:caseId/approve').post(verifyToken, doctorApprove);
+casesRouter.route('/:caseId/doctor-request-changes').post(verifyToken, doctorRequestCaseChanges);
 
 
 module.exports = casesRouter;
