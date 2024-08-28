@@ -3,7 +3,9 @@ const adminRoutes = require('./modules/admin/admin');
 const casesRoutes = require('./modules/cases/cases');
 const authRoutes = require('./modules/auth/auth');
 const servicesRouter = require('./modules/services/services');
+const doctorRouter = require('./modules/doctor/doctor');
 const globalErrorHandler = require('./utils/errors/errorController');
+const initJobs = require('./utils/jobs/initJobs');
 
 
 const express = require('express');
@@ -15,8 +17,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// initJobs();
 
-app.use('/api/v1/', casesRoutes, adminRoutes, authRoutes, servicesRouter);
+
+app.use('/api/v1/', casesRoutes, adminRoutes, authRoutes, servicesRouter, doctorRouter);
 
 
 

@@ -69,7 +69,7 @@ const getAllCases = catchAsync(async (req, res, next) => {
         return next(new AppError('Cases not found', 404));
     }
 
-    const pagination = getPaginationData(response.count, queryParams.page, queryParams.size)
+    const pagination = getPaginationData(response.count, queryParams.page, queryParams.size);
     const jsonDate = response.rows.map(element => element.toJSON());
 
     jsonDate.forEach(element => {

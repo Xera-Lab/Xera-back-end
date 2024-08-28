@@ -3,7 +3,7 @@ const getPaginationData = (count, page, size) => {
     var nextPage = Number(page || 1) + 1;
     var prevPage = (page || 1) - 1;
 
-    if ((nextPage * (size || count)) > count) {
+    if (((page || count) * (size || count)) > count) {
         nextPage = null;
     }
 
