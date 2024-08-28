@@ -28,7 +28,7 @@ app.use(globalErrorHandler);
 
 
 // Check if .env file exists and have APP_PORT defined in it else use 4000
-const PORT = process.env.APP_PORT || 8080;
+const PORT = process.env.APP_PORT || 3000;
 
 app.listen(PORT, () => {
     console.log('Server up and running', PORT);
