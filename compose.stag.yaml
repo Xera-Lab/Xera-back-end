@@ -3,7 +3,7 @@ services:
     image: postgres:latest
     hostname: postgres
     ports:
-      - 5432:5432
+      - 5431:5432
     volumes:
       - ./app/postgres-data:/var/lib/postgresql/data
     environment:
@@ -12,7 +12,9 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
 
   xera_stag:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.stag
     ports:
       - 5000:5000
     volumes:
