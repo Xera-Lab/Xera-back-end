@@ -13,8 +13,14 @@ const cors = require('cors');
 
 const app = express();
 
+const corsOptions = {
+    origin: 'https://stag.xeralab.com', // Replace with your frontend domain
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    optionsSuccessStatus: 204,
+};
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // initJobs();
