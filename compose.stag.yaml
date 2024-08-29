@@ -30,6 +30,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${DB_PORT}
     depends_on:
       - postgres_stag
     env_file:
