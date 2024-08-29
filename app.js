@@ -1,4 +1,4 @@
-require('dotenv').config({ path: `${process.cwd()}/.env` });
+require('dotenv').config({ path: `${process.cwd()}/.env.staging` });
 const adminRoutes = require('./modules/admin/admin');
 const casesRoutes = require('./modules/cases/cases');
 const authRoutes = require('./modules/auth/auth');
