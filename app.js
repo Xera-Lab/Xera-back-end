@@ -14,7 +14,7 @@ const cors = require('cors');
 const app = express();
 
 const corsOptions = {
-    origin: 'https://stag.xeralab.com', // Replace with your frontend domain
+    origin: ['http://localhost:5000', 'http://192.168.1.x:5000', 'http://127.0.0.1:5000'], // Replace with your frontend domain
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     optionsSuccessStatus: 204,
