@@ -3,7 +3,7 @@ FROM --platform=linux/amd64 node:slim
 # FROM node:slim
 
 # Declaring env
-ENV NODE_ENV=local
+ENV NODE_ENV=prod
 
 # Setting up the work directory
 WORKDIR /xera_app
