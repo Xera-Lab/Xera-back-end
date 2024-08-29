@@ -11,6 +11,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+    env_file:
+      - .env.staging
     restart: always
 
   xera_stag:
@@ -28,6 +30,8 @@ services:
       POSTGRES_HOST: ${POSTGRES_HOST}
     depends_on:
       - postgres_stag
+    env_file:
+      - .env.staging
     restart: always
     command: >
       sh -c "
