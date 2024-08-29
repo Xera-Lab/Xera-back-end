@@ -5,7 +5,7 @@ services:
     ports:
       - 5430:5432
     volumes:
-      - ./app/postgres-data:/var/lib/postgresql/data
+      - ./app-local/postgres-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
