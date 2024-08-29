@@ -1,7 +1,8 @@
 services:
   postgres_stag:
     image: postgres:latest
-    hostname: postgres
+    hostname: ${POSTGRES_HOST}
+    container_name: postgres_stag_db
     ports:
       - 5431:5432
     volumes:
@@ -12,6 +13,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     env_file:
       - .env.staging
+    restart: always
 
   xera_stag:
     build:
@@ -25,12 +27,12 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_HOST: postgres_stag
+      POSTGRES_HOST: ${POSTGRES_HOST}
     depends_on:
       - postgres_stag
     env_file:
       - .env.staging
-    # local
+    restart: always
     command: >
       sh -c "
       npx sequelize-cli db:migrate &&
