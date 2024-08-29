@@ -13,12 +13,26 @@ const cors = require('cors');
 
 const app = express();
 
+// Define allowed origins
+const allowedOrigins = ['https://stag.xeralab.com'];
+
+// CORS configuration
 const corsOptions = {
-    origin: ['http://localhost:5000', 'http://192.168.1.x:5000', 'http://127.0.0.1:5000'], // Replace with your frontend domain
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        console.log(`origin ===>> ${origin}`);
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('CORS policy: Origin not allowed'));
+        }
+    },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
-    optionsSuccessStatus: 204,
+    credentials: true, // Allow cookies if needed
+    optionsSuccessStatus: 204
 };
+
 
 app.use(cors(corsOptions));
 app.use(express.json());
