@@ -16,9 +16,6 @@ const app = express();
 // CORS configuration
 const corsOptions = {
     origin: '*',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true, // Allow cookies if needed
-    optionsSuccessStatus: 204
 };
 
 
