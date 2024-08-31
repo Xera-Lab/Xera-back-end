@@ -1,28 +1,25 @@
-version: "3.8"
-
 services:
-  postgres_stag:
+  postgres_local:
     image: postgres:latest
     hostname: ${POSTGRES_HOST}
-    container_name: postgres_stag_db
     ports:
-      - 5431:5432
+      - ${DB_PORT}:5432
     volumes:
-      - ./app-stag/postgres-data:/var/lib/postgresql/data
+      - ./app-${NODE_ENV}:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     env_file:
-      - .env.staging
+      - .env
     restart: always
 
-  xera_stag:
+  xera_local:
     build:
       context: .
-      dockerfile: Dockerfile.stag
+      dockerfile: Dockerfile
     ports:
-      - 5000:5000
+      - ${APP_PORT}:${APP_PORT}
     volumes:
       - ./:/xera_app
     environment:
@@ -30,15 +27,14 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_HOST: ${POSTGRES_HOST}
-      POSTGRES_PORT: ${DB_PORT}
     depends_on:
-      - postgres_stag
+      - ${POSTGRES_HOST}
     env_file:
-      - .env.staging
+      - .env
     restart: always
     command: >
       sh -c "
       npx sequelize-cli db:migrate &&
       npx sequelize-cli db:seed:all &&
-      npm run stag
+      npm run local
       "

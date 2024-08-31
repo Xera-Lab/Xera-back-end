@@ -1,4 +1,4 @@
-require('dotenv').config({ path: `${process.cwd()}/.env.staging` });
+require('dotenv').config();
 const adminRoutes = require('./modules/admin/admin');
 const casesRoutes = require('./modules/cases/cases');
 const authRoutes = require('./modules/auth/auth');
@@ -13,21 +13,9 @@ const cors = require('cors');
 
 const app = express();
 
-// Define allowed origins
-const allowedOrigins = ['https://stag.xeralab.com'];
-
 // CORS configuration
 const corsOptions = {
-    origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl requests)
-        console.log(`origin ===>> ${origin}`);
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('CORS policy: Origin not allowed'));
-        }
-    },
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // Allow cookies if needed
     optionsSuccessStatus: 204

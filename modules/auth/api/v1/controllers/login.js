@@ -54,7 +54,6 @@ const login = catchAsync(async (req, res, next) => {
         }
     }
 
-
     if (!(await bcrypt.compare(password, authUserData.password))) {
         return next(new AppError('Incorrect password', 401));
     }

@@ -1,11 +1,11 @@
-require('dotenv').config({ path: `${process.cwd()}/.env.staging` });
+require('dotenv').config();
 
 module.exports = {
     local: {
         username: process.env.POSTGRES_USER,
         password: process.env.POSTGRES_PASSWORD,
         database: process.env.POSTGRES_DB,
-        port: process.env.DB_PORT,
+        port: 5432,
         host: process.env.POSTGRES_HOST || 'localhost',
         dialect: 'postgres', // This is the database type
         seederStorage: 'sequelize',
@@ -17,7 +17,7 @@ module.exports = {
         username: process.env.POSTGRES_USER,
         password: process.env.POSTGRES_PASSWORD,
         database: process.env.POSTGRES_DB,
-        port: process.env.DB_PORT,
+        port: 5432,
         host: process.env.POSTGRES_HOST || 'localhost',
         dialect: 'postgres',
         seederStorage: 'sequelize',
@@ -29,8 +29,8 @@ module.exports = {
         username: process.env.POSTGRES_USER,
         password: process.env.POSTGRES_PASSWORD,
         database: process.env.POSTGRES_DB,
+        port: 5432,
         host: process.env.POSTGRES_HOST || 'localhost',
-        port: process.env.DB_PORT,
         dialect: 'postgres',
     },
 };
