@@ -15,7 +15,7 @@ const app = express();
 
 // CORS configuration
 const corsOptions = {
-    origin: '*',
+    origin: "https://stag.xeralab.com",
 };
 
 
