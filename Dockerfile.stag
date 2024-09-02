@@ -19,4 +19,4 @@ RUN npm install
 RUN npm install -g sequelize-cli
 
 # Exposing server port
-EXPOSE 5000
+EXPOSE 6000
