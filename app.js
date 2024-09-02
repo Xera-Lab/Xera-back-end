@@ -16,6 +16,10 @@ const app = express();
 // CORS configuration
 const corsOptions = {
     origin: "https://stag.xeralab.com",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS", // Ensure all methods are allowed
+    allowedHeaders: "Content-Type,Authorization", // Specify allowed headers
+    credentials: true, // If you want to send cookies or auth headers
+    optionsSuccessStatus: 204 // Some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
 
