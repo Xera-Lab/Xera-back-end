@@ -108,14 +108,14 @@ const signUp = catchAsync(async (req, res, next) => {
         await transaction.commit();
 
 
-        // try {
-        //     sendWelcomeEmail({
-        //         email: result.email,
-        //         name: result.firstName + ' ' + result.lastName,
-        //     });
-        // } catch (err) {
-        //     console.log(err);
-        // }
+        try {
+            sendWelcomeEmail({
+                email: result.email,
+                name: result.firstName + ' ' + result.lastName,
+            });
+        } catch (err) {
+            console.log(err);
+        }
 
         await otpUser.destroy();
 

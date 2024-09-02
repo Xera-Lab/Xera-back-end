@@ -65,9 +65,6 @@ const resendOtp = catchAsync(async (req, res, next) => {
 
     const otp = Math.floor(100000 + Math.random() * 900000);
 
-    console.log(otp);
-
-    // await sendOtpEmail(email, otp);
 
     if (otpUser) {
         otpUser.otp = otp;
@@ -89,7 +86,7 @@ const resendOtp = catchAsync(async (req, res, next) => {
     }
 
 
-
+    await sendOtpEmail(email, otp);
 
     return res.status(200).json({
         status: 'success',

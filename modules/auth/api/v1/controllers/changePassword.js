@@ -8,9 +8,7 @@ const roles = require(`${process.cwd()}/db/models/auth/role`);
 const authUser = require(`${process.cwd()}/db/models/auth/authUser`);
 const usersOtp = require(`${process.cwd()}/db/models/auth/usersOtp`);
 const { OtpTypes } = require(`${process.cwd()}/utils/constants/enums`);
-const { createDoctor } = require(`${process.cwd()}/db/models/doctor/doctor`);
 
-const sendWelcomeEmail = require(`${process.cwd()}/modules/auth/services/sendWelcomeEmail`);
 
 
 const changePassword = catchAsync(async (req, res, next) => {

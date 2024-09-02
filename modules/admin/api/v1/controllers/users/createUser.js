@@ -6,7 +6,6 @@ const roles = require(`${process.cwd()}/db/models/auth/role`);
 const authUser = require(`${process.cwd()}/db/models/auth/authUser`);
 const { createAdmin } = require(`${process.cwd()}/db/models/admin/admin`);
 
-const sendWelcomeEmail = require(`${process.cwd()}/modules/auth/services/sendWelcomeEmail`);
 
 
 const createUser = catchAsync(async (req, res, next) => {

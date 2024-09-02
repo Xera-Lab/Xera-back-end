@@ -15,8 +15,6 @@ const mailer = nodemailer.createTransport({
 
 // Verify the connection configuration
 mailer.verify((error, success) => {
-    console.log(process.env.EMAIL_USER);
-    console.log(process.env.EMAIL_PASS);
     if (error) {
         console.error('Error configuring email mailer:', error);
     } else {

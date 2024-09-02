@@ -74,10 +74,6 @@ const sendOtp = catchAsync(async (req, res, next) => {
 
     const otp = Math.floor(100000 + Math.random() * 900000);
 
-    console.log(otp);
-
-    await sendOtpEmail(email, otp);
-
     if (otpUser) {
         const updatedAt = new Date(otpUser.updatedAt ?? Date.now());
         const oneHourAfterUpdate = new Date(updatedAt.getTime() + 60 * 60 * 1000); // Adding 1 hour in milliseconds
@@ -106,7 +102,7 @@ const sendOtp = catchAsync(async (req, res, next) => {
     }
 
 
-
+    await sendOtpEmail(email, otp);
 
     return res.status(200).json({
         status: 'success',

@@ -8,7 +8,6 @@ const usersOtp = require(`${process.cwd()}/db/models/auth/usersOtp`);
 const { OtpTypes } = require(`${process.cwd()}/utils/constants/enums`);
 const { createDoctor } = require(`${process.cwd()}/db/models/doctor/doctor`);
 
-const sendWelcomeEmail = require(`${process.cwd()}/modules/auth/services/sendWelcomeEmail`);
 
 
 const resetPassword = catchAsync(async (req, res, next) => {
