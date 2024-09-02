@@ -1,5 +1,5 @@
 services:
-  postgres_local:
+  postgres:
     image: postgres:latest
     hostname: ${POSTGRES_HOST}
     ports:
