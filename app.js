@@ -14,16 +14,18 @@ const cors = require('cors');
 const app = express();
 
 // CORS configuration
-const corsOptions = {
-    origin: ["https://stag.xeralab.com", "https://stag-admin.xeralab.com"],
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS", // Ensure all methods are allowed
-    allowedHeaders: "Content-Type,Authorization", // Specify allowed headers
-    credentials: true, // If you want to send cookies or auth headers
-    optionsSuccessStatus: 204 // Some legacy browsers (IE11, various SmartTVs) choke on 204
-};
+var allowlist = ['https://stag.xeralab.com', 'https://stag-admin.xeralab.com']
+var corsOptionsDelegate = function (req, callback) {
+    var corsOptions;
+    if (allowlist.indexOf(req.header('Origin')) !== -1) {
+        corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+    } else {
+        corsOptions = { origin: false } // disable CORS for this request
+    }
+    callback(null, corsOptions) // callback expects two parameters: error and options
+}
 
-
-app.use(cors(corsOptions), express.json());
+app.use(cors(corsOptionsDelegate), express.json());
 
 
 initJobs();
