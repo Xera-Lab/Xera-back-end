@@ -5,15 +5,14 @@ const createUser = require(`${process.cwd()}/modules/admin/api/v1/controllers/us
 
 
 //! ======= [Middleware] =========
-const verifyToken = require(`${process.cwd()}/utils/middleware/authentication/verifyToken`);
 const verifyPermision = require(`${process.cwd()}/utils/middleware/authorization/verifyPermision`);
 
 const express = require('express');
 const usersRouter = express.Router();
 
 //? Roles
-usersRouter.route('/users').get(verifyToken, getAllUsers);
-usersRouter.route('/users').post(verifyToken, createUser);
+usersRouter.route('/users').get(getAllUsers);
+usersRouter.route('/users').post(verifyPermision('create_user'), createUser);
 
 
 

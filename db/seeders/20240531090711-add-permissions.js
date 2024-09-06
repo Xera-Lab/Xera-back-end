@@ -11,32 +11,15 @@ module.exports = {
       },
       [
         {
-          name: 'create_case_status',
-          displayName: 'Create Case Status',
-          description: 'Create new case status',
-        },
-
-        {
-          name: 'update_case_status',
-          displayName: 'Update Case Status',
-          description: 'Update case status',
-        },
-        {
-          name: 'delete_case_status',
-          displayName: 'Delete Case Status',
-          description: 'Delete case status',
-        },
-        {
-          name: 'get_all_case_statuss',
-          displayName: 'Get All Case Statuss',
-          description: 'Get all case statuss',
+          name: 'create_user',
+          displayName: 'Create User',
+          description: 'Create new user',
         },
         {
           name: 'create_permission',
           displayName: 'Create Permission',
           description: 'Create new permission',
         },
-
         {
           name: 'update_permission',
           displayName: 'Update Permission',
@@ -69,12 +52,10 @@ module.exports = {
           description: 'Delete role',
         },
         {
-          name: 'get_all_roles',
-          displayName: 'Get All Roles',
-          description: 'Get all roles',
+          name: 'assign_permission_to_role',
+          displayName: 'Assign Permission to Role',
+          description: 'Assign permission to role',
         },
-
-
       ],
     );
   },

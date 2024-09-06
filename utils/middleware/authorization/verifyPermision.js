@@ -36,7 +36,7 @@ const verifyPermision = (requiredPermission) => {
             return next();
         } else {
 
-            return next(new AppError('You don\'t have permission', 404));
+            return next(new AppError('You don\'t have permission', 403));
         }
 
     });

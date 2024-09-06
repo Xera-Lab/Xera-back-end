@@ -30,7 +30,7 @@ const getAllUsers = catchAsync(async (req, res, next) => {
                             name: queryParams.role
                         } : null,
                         required: true,
-                        attributes: ['name', 'display_name'],
+                        attributes: ['name', 'displayName'],
 
                     },
                 ],

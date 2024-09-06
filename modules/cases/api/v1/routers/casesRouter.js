@@ -15,7 +15,6 @@ const getCasesCountByStatus = require(`${process.cwd()}/modules/cases/api/v1/con
 const doctorApprove = require(`${process.cwd()}/modules/cases/api/v1/controllers/doctorApprove`);
 const doctorRequestCaseChanges = require(`${process.cwd()}/modules/cases/api/v1/controllers/doctorRequestCaseChanges`);
 
-const verifyToken = require(`${process.cwd()}/utils/middleware/authentication/verifyToken`);
 const verifyPermision = require(`${process.cwd()}/utils/middleware/authorization/verifyPermision`);
 const upload = require(`${process.cwd()}/modules/cases/api/v1/middleware/upload`);
 
@@ -24,25 +23,25 @@ const casesRouter = express.Router();
 
 
 
-// casesRouter.route('/get_all_cases').get(verifyToken, verifyPermision('get_all_cases'), getAllCases);
-casesRouter.route('/get-all-cases').get(verifyToken, getAllCases);
-casesRouter.route('/submit-case').post(verifyToken, submitNewCase);
-casesRouter.route('/get-cases-count').get(verifyToken, getCasesCountByStatus);
+// casesRouter.route('/get_all_cases').get( verifyPermision('get_all_cases'), getAllCases);
+casesRouter.route('/get-all-cases').get(getAllCases);
+casesRouter.route('/submit-case').post(submitNewCase);
+casesRouter.route('/get-cases-count').get(getCasesCountByStatus);
 
-casesRouter.route('/:caseId').get(verifyToken, getCaseById);
-casesRouter.route('/:caseId').delete(verifyToken, deleteCase);
-casesRouter.route('/:caseId/upload').post(verifyToken, upload.single('file'), uploadCaseFiles);
-casesRouter.route('/download').post(verifyToken, caseDownloadUrl);
-casesRouter.route('/:caseId/assign').post(verifyToken, assignCase);
-casesRouter.route('/:caseId/assign-supervisor').post(verifyToken, assignCaseToSupervisor);
-casesRouter.route('/:caseId/start-work').post(verifyToken, startWorkOnCase);
-casesRouter.route('/:caseId/send-to-review').post(verifyToken, upload.single('file'), sendCaseToReview);
-// casesRouter.route('/:caseId/send-to-review').post(verifyToken, sendCaseToReview);
-casesRouter.route('/:caseId/start-review').post(verifyToken, startCaseReview);
-casesRouter.route('/:caseId/request-changes').post(verifyToken, requestCaseChanges);
-casesRouter.route('/:caseId/finish-case').post(verifyToken, finishCase);
-casesRouter.route('/:caseId/approve').post(verifyToken, doctorApprove);
-casesRouter.route('/:caseId/doctor-request-changes').post(verifyToken, doctorRequestCaseChanges);
+casesRouter.route('/:caseId').get(getCaseById);
+casesRouter.route('/:caseId').delete(deleteCase);
+casesRouter.route('/:caseId/upload').post(upload.single('file'), uploadCaseFiles);
+casesRouter.route('/download').post(caseDownloadUrl);
+casesRouter.route('/:caseId/assign').post(assignCase);
+casesRouter.route('/:caseId/assign-supervisor').post(assignCaseToSupervisor);
+casesRouter.route('/:caseId/start-work').post(startWorkOnCase);
+casesRouter.route('/:caseId/send-to-review').post(upload.single('file'), sendCaseToReview);
+// casesRouter.route('/:caseId/send-to-review').post( sendCaseToReview);
+casesRouter.route('/:caseId/start-review').post(startCaseReview);
+casesRouter.route('/:caseId/request-changes').post(requestCaseChanges);
+casesRouter.route('/:caseId/finish-case').post(finishCase);
+casesRouter.route('/:caseId/approve').post(doctorApprove);
+casesRouter.route('/:caseId/doctor-request-changes').post(doctorRequestCaseChanges);
 
 
 module.exports = casesRouter;

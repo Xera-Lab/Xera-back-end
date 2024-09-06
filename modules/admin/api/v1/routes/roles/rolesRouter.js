@@ -8,18 +8,13 @@ const deleteRole = require(`${process.cwd()}/modules/admin/api/v1/controllers/ro
 const getAllRoles = require(`${process.cwd()}/modules/admin/api/v1/controllers/roles/getAllRoles`);
 
 //! ======= [Middleware] =========
-const verifyToken = require(`${process.cwd()}/utils/middleware/authentication/verifyToken`);
 const verifyPermision = require(`${process.cwd()}/utils/middleware/authorization/verifyPermision`);
 
 
-// rolesRouter.route('/roles').post(verifyToken, verifyPermision('create_role'), createRole);
-// rolesRouter.route('/roles/:id').patch(verifyToken, verifyPermision('update_role'), updateRole);
-// rolesRouter.route('/roles/:id').delete(verifyToken, verifyPermision('delete_role'), deleteRole);
-// rolesRouter.route('/roles').get(verifyToken, verifyPermision('get_all_roles'), getAllRoles);
-rolesRouter.route('/roles').post(verifyToken, createRole);
-rolesRouter.route('/roles/:id').patch(verifyToken, updateRole);
-rolesRouter.route('/roles/:id').delete(verifyToken, deleteRole);
-rolesRouter.route('/roles').get(verifyToken, getAllRoles);
+rolesRouter.route('/roles').post(verifyPermision('create_role'), createRole);
+rolesRouter.route('/roles/:id').patch(verifyPermision('update_role'), updateRole);
+rolesRouter.route('/roles/:id').delete(verifyPermision('delete_role'), deleteRole);
+rolesRouter.route('/roles').get(getAllRoles);
 
 
 module.exports = rolesRouter;

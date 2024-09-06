@@ -12,10 +12,10 @@ module.exports = {
       [
         {
           roleId: 1,
-          firstName: "Abdullah",
-          lastName: "Mohamed",
+          firstName: "Super",
+          lastName: "Admin",
           email: "super.admin@gmail.com",
-          password: "123456",
+          password: "$2b$12$yUIwb1IJKmEAa5rPG1E4eeYTs942t8NMIPr7olzUbUFAXEiulkNv2",
         },
 
       ],

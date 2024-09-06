@@ -6,6 +6,7 @@ const servicesRouter = require('./modules/services/services');
 const doctorRouter = require('./modules/doctor/doctor');
 const globalErrorHandler = require('./utils/errors/errorController');
 const initJobs = require('./utils/jobs/initJobs');
+const verifyToken = require(`${process.cwd()}/utils/middleware/authentication/verifyToken`);
 
 
 const express = require('express');
@@ -23,20 +24,23 @@ const corsOptions = {
 };
 
 
-app.use(cors(corsOptions));
-app.use(express.json());
-
-// initJobs();
+app.use(cors(corsOptions), express.json());
 
 
-app.use('/api/v1/', casesRoutes, adminRoutes, authRoutes, servicesRouter, doctorRouter);
+initJobs();
+
+
+
+app.use('/api/v1', authRoutes);
+
+app.use('/api/v1', verifyToken, casesRoutes, adminRoutes, servicesRouter, doctorRouter);
 
 
 
 app.use(globalErrorHandler);
 
 
-// Check if .env file exists and have APP_PORT defined in it else use 4000
+// Check if .env file exists and have APP_PORT defined in it else use 3000
 const PORT = process.env.APP_PORT || 3000;
 
 app.listen(PORT, () => {

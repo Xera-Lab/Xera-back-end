@@ -54,22 +54,6 @@ module.exports = {
           roleId: 1,
           permissionId: 9,
         },
-
-        {
-          roleId: 1,
-          permissionId: 10,
-        },
-
-        {
-          roleId: 1,
-          permissionId: 11,
-        },
-
-        {
-          roleId: 1,
-          permissionId: 12,
-        },
-
       ],
     );
   },

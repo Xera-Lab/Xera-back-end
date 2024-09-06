@@ -26,7 +26,7 @@ const uploadServiceImage = catchAsync(async (req, res, next) => {
             return next(new AppError('Only svg and png files are allowed', 400));
         }
 
-        const fileName = `Services/${serviceId}/${serviceData.searchName}.${image.originalname.split('.').pop()}`;
+        const fileName = `Services-${process.env.NODE_ENV}/${serviceId}/${serviceData.searchName}.${image.originalname.split('.').pop()}`;
 
         const fileUrl = await AwsConfig.uploadFileToPublicS3(
             fileName,

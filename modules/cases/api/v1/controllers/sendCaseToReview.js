@@ -123,7 +123,7 @@ const sendCaseToReview = catchAsync(async (req, res, next) => {
             { transaction }
         );
 
-        const fileName = `Cases/${caseId}/Submited.${file.originalname.split('.').pop()}`;
+        const fileName = `Cases-${process.env.NODE_ENV}/${caseId}/Submited.${file.originalname.split('.').pop()}`;
         const fileUrl = await AwsConfig.uploadFileToS3(fileName, file);
 
         caseData.statusId = caseStatusDate.id;

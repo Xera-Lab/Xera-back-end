@@ -26,7 +26,7 @@ const uploadCaseFiles = catchAsync(async (req, res, next) => {
             return next(new AppError('Only zip files are allowed', 400));
         }
 
-        const fileName = `Cases/${caseId}/Original.${file.originalname.split('.').pop()}`;
+        const fileName = `Cases-${process.env.NODE_ENV}/${caseId}/Original.${file.originalname.split('.').pop()}`;
 
         const fileUrl = await AwsConfig.uploadFileToS3(
             fileName,

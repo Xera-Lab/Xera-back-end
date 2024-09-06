@@ -11,19 +11,24 @@ module.exports = {
       },
       [
         {
-          name: 'Super Admin',
+          name: 'SUPERADMIN',
+          displayName: 'Super Admin',
         },
         {
-          name: 'Admin',
+          name: 'ADMIN',
+          displayName: 'Admin',
         },
         {
-          name: 'Supervisor',
+          name: 'SUPERVISOR',
+          displayName: 'Supervisor',
         },
         {
-          name: 'Technician',
+          name: 'TECHNICIAN',
+          displayName: 'Technician',
         },
         {
-          name: 'Doctor',
+          name: 'DOCTOR',
+          displayName: 'Doctor',
         },
       ],
     );

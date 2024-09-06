@@ -17,7 +17,7 @@ const role = sequelize.define(
             type: DataTypes.STRING,
             unique: true
         },
-        display_name: {
+        displayName: {
             type: DataTypes.STRING,
             unique: true
         },

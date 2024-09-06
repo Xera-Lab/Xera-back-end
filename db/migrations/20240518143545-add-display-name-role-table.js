@@ -7,7 +7,7 @@ module.exports = {
       {
         tableName: 'role',
         schema: 'auth',
-      }, 'display_name',
+      }, 'displayName',
       {
         type: Sequelize.STRING,
         allowNull: true,
@@ -21,7 +21,7 @@ module.exports = {
         tableName: 'role',
         schema: 'auth',
       },
-      'display_name',
+      'displayName',
     );
 
   }

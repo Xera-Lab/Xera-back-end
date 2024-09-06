@@ -51,7 +51,7 @@ const createSuperAdmin = async (data, transaction) => {
   try {
     const newUserDate = await superAdmin.create({
       authId: data.authId,
-      userId: `SUPER_${data.authId}`,
+      userId: `${data.roleName.toUpperCase()}_${data.authId}`,
     }, { transaction });
 
     if (!newUserDate) {

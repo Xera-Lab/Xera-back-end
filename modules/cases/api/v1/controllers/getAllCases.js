@@ -29,7 +29,7 @@ const getAllCases = catchAsync(async (req, res, next) => {
         whereCondition = {
             doctorId: userId,
         };
-    } else if (userId.split('_')[0] === 'SUPER' || userId.split('_')[0] === 'ADMIN') {
+    } else if (userId.split('_')[0] === 'SUPERADMIN' || userId.split('_')[0] === 'ADMIN') {
         whereCondition = null;
     } else if (userId.split('_')[0] === 'SUPERVISOR') {
         whereCondition = {
@@ -40,6 +40,7 @@ const getAllCases = catchAsync(async (req, res, next) => {
             assigneeId: userId,
         };
     }
+    console.log('whereCondition', whereCondition);
 
 
 
