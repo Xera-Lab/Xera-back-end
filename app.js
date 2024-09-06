@@ -15,7 +15,7 @@ const app = express();
 
 // CORS configuration
 const corsOptions = {
-    origin: "https://stag.xeralab.com",
+    origin: ["https://stag.xeralab.com", "https://stag-gate.xeralab.com"],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS", // Ensure all methods are allowed
     allowedHeaders: "Content-Type,Authorization", // Specify allowed headers
     credentials: true, // If you want to send cookies or auth headers
