@@ -6,7 +6,6 @@ const servicesRouter = require('./modules/services/services');
 const doctorRouter = require('./modules/doctor/doctor');
 const globalErrorHandler = require('./utils/errors/errorController');
 const initJobs = require('./utils/jobs/initJobs');
-const verifyToken = require(`${process.cwd()}/utils/middleware/authentication/verifyToken`);
 
 
 const express = require('express');
@@ -33,7 +32,7 @@ initJobs();
 
 app.use('/api/v1', authRoutes);
 
-app.use('/api/v1', verifyToken, casesRoutes, adminRoutes, servicesRouter, doctorRouter);
+app.use('/api/v1', casesRoutes, adminRoutes, servicesRouter, doctorRouter);
 
 
 
