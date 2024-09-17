@@ -15,6 +15,7 @@ const app = express();
 
 // CORS configuration
 var allowlist = ['https://stag.xeralab.com', 'https://stag-admin.xeralab.com']
+
 var corsOptionsDelegate = function (req, callback) {
     var corsOptions;
     if (allowlist.indexOf(req.header('Origin')) !== -1) {
