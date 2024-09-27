@@ -12,7 +12,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     env_file:
       - .env
-    restart: always
+    # restart: always
 
   xera_local:
     build:
@@ -31,7 +31,7 @@ services:
       - ${POSTGRES_HOST}
     env_file:
       - .env
-    restart: always
+    # restart: always
     command: >
       sh -c "
       npx sequelize-cli db:migrate &&
